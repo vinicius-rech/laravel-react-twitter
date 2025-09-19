@@ -41,6 +41,7 @@ export default function LoginPage() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
+
         <input
           className="input-default"
           type="password"
@@ -48,6 +49,7 @@ export default function LoginPage() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
+        
         <button className="btn-submit">Log in</button>
         <p className="register-cta">
           Não possui uma conta? <a href="/register">Cadastre-se</a>
