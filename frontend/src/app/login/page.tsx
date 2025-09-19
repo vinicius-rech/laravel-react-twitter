@@ -4,6 +4,9 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@context/AuthContext";
 import { AxiosError } from "axios";
+import Input from "../../components/Input";
+import Button from "../../components/Button";
+import Title from "../../components/Title";
 
 export default function LoginPage() {
   const { loginUser } = useAuth();
@@ -33,24 +36,22 @@ export default function LoginPage() {
   return (
     <div className="container">
       <form className="form-container" onSubmit={handleSubmit}>
-        <h1 className="title">Log in</h1>
-        <input
-          className="input-default"
+        <Title>Log in</Title>
+        <Input
           type="email"
           placeholder="Username or email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
 
-        <input
-          className="input-default"
+        <Input
           type="password"
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        
-        <button className="btn-submit">Log in</button>
+
+        <Button type="submit">Log in</Button>
         <p className="register-cta">
           Não possui uma conta? <a href="/register">Cadastre-se</a>
         </p>
