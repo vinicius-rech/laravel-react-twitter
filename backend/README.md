@@ -1,61 +1,129 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Backend (Laravel 12)
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+API REST construída em Laravel 12 usando Laravel Sanctum para autenticação via Bearer Token. Banco de dados padrão: PostgreSQL.
 
-## About Laravel
+## Requisitos
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- PHP 8.2+
+- Composer 2+
+- Extensões PHP comuns (pdo, pdo_sqlite etc.)
+- Opcional: Node.js se quiser rodar o Vite local do Laravel (não é necessário para a API)
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Configuração (Windows e Linux)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+1. Copie o .env
+   - Linux/Git Bash (Windows): `cp .env.example .env`
+   - PowerShell (Windows): `Copy-Item .env.example .env`
 
-## Learning Laravel
+2. Configure o PostgreSQL
+   - Abra `.env` e confirme/ajuste:
+     - `DB_CONNECTION=pgsql`
+     - `DB_HOST=127.0.0.1`
+     - `DB_PORT=5432`
+     - `DB_DATABASE=laravel`
+     - `DB_USERNAME=root`
+     - `DB_PASSWORD=password`
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+3. Instale dependências e gere chave
+   - `composer install`
+   - `php artisan key:generate`
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+4. Crie o banco e rode migrações/seed
+   - Crie banco/usuário no PostgreSQL (com superusuário, ex.: `postgres`):
+     - Linux:
+       - `sudo -u postgres psql -c "CREATE DATABASE laravel;"`
+       - `sudo -u postgres psql -c "CREATE USER root WITH PASSWORD 'password';"`
+       - `sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE laravel TO root;"`
+     - Windows (psql no PATH):
+       - `psql -U postgres -h 127.0.0.1 -p 5432 -c "CREATE DATABASE laravel;"`
+       - `psql -U postgres -h 127.0.0.1 -p 5432 -c "CREATE USER root WITH PASSWORD 'password';"`
+       - `psql -U postgres -h 127.0.0.1 -p 5432 -c "GRANT ALL PRIVILEGES ON DATABASE laravel TO root;"`
+   - Rode as migrações e seed:
+     - `php artisan migrate --seed`
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+5. Rode o servidor
+   - `php artisan serve`
+   - URL: [http://127.0.0.1:8000](http://127.0.0.1:8000) (API: [http://127.0.0.1:8000/api](http://127.0.0.1:8000/api))
 
-## Laravel Sponsors
+Usuários seedados (senha: `Password@123`):
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+- `carlos@example.com`
+- `fernanda@example.com`
+- `isabela@example.com`
+- `rafael@example.com`
+- `beatriz@example.com`
+- `rodrigo@example.com`
 
-### Premium Partners
+## Variáveis de ambiente úteis
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+- `APP_URL=http://localhost`
+- `ALLOWED_ORIGINS=http://localhost:3000,http://localhost`
+- `DB_*` (ver exemplos acima para PostgreSQL)
+- `SESSION_DRIVER=database` (já configurado por padrão)
 
-## Contributing
+CORS: Por padrão, o Laravel inclui um middleware de CORS. Existe também um middleware opcional `App\Http\Middleware\SecureApiHeaders` que lê `ALLOWED_ORIGINS` do `.env` e responde a preflight (OPTIONS). Se decidir adicioná-lo ao Kernel, inclua a origem do frontend em `ALLOWED_ORIGINS`.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## Endpoints
 
-## Code of Conduct
+Base URL: `/api`
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Auth
 
-## Security Vulnerabilities
+- POST `/api/register`
+  - Body JSON: `{ "name": string, "email": string, "password": string, "password_confirmation": string }`
+  - Resposta: `{ data: { token_type, token, user } }`
+- POST `/api/login`
+  - Body JSON: `{ "email": string, "password": string }`
+  - Resposta: `{ data: { token_type, token, user } }`
+- POST `/api/logout` (requer Authorization: Bearer `<token>`)
+  - Resposta: `{ message }`
+- GET `/api/user` (requer Authorization)
+  - Resposta: `{ data: { user: { id, name, email } } }`
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Tweets (requer Authorization)
 
-## License
+- GET `/api/tweets?page=1`
+  - Resposta: paginação Laravel com tweets e relação user
+- POST `/api/tweets`
+  - Body JSON: `{ "content": string (<= 280), "visibility": "public" | "private" }`
+  - Resposta: tweet criado com user incluso
+- PUT `/api/tweets/{id}`
+  - Body JSON: `{ "content": string, "visibility": "public" | "private" }`
+  - Resposta: tweet atualizado
+- DELETE `/api/tweets/{id}`
+  - Resposta: `{ message }`
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## Exemplos rápidos de cURL
+
+Login:
+
+- `curl -X POST http://127.0.0.1:8000/api/login -H "Content-Type: application/json" -d '{"email":"carlos@example.com","password":"Password@123"}'`
+
+Listar tweets (com token):
+
+- `curl http://127.0.0.1:8000/api/tweets -H "Authorization: Bearer <TOKEN>"`
+
+## Testes
+
+- Limpar cache e rodar testes:
+  - `composer test`
+
+## Troubleshooting
+
+- 401 Unauthorized nas rotas de tweets: verifique se o header `Authorization: Bearer <token>` está sendo enviado.
+- CORS via navegador: ajuste `ALLOWED_ORIGINS` no `.env` se estiver usando o middleware `SecureApiHeaders` e confirme a origem (ex.: `http://localhost:3000`). Se não estiver usando esse middleware customizado, o CORS padrão do Laravel normalmente cobre as necessidades do dev.
+- Banco PostgreSQL: confirme se o banco/usuário foram criados e se `DB_HOST`, `DB_PORT`, `DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD` estão corretos.
+
+## (Opcional) Usar SQLite no desenvolvimento
+
+Se preferir SQLite no ambiente local:
+
+1. Ajuste `.env`:
+
+- `DB_CONNECTION=sqlite`
+- `DB_DATABASE=database/database.sqlite`
+
+1. Criar arquivo de banco e migrar:
+
+- `php -r "file_exists('database/database.sqlite') || touch('database/database.sqlite');"`
+- `php artisan migrate --seed`
