@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 use App\Http\Requests\AuthRequest;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\RegisterRequest;
@@ -27,7 +29,7 @@ class AuthController extends Controller
 
     /*
      * Generate a new authentication token for the user
-    */
+     */
     private function generateToken(User $user): string
     {
         return $user->createToken('auth_token')->plainTextToken;
@@ -36,19 +38,19 @@ class AuthController extends Controller
     /**
      * Build the authentication response data
      */
-    private function buildAuthResponseData(User $user, string $token): array
+    private function buildAuthResponseData(User $user, string $auth_token): array
     {
         return [
             'user' => $user,
             'token_type' => 'Bearer',
-            'token' => $token
+            'auth_token' => $auth_token
         ];
     }
 
     /**
      * Handle user login and token generation.
      */
-    public function login(AuthRequest $request)
+    public function login(AuthRequest $request): JsonResponse
     {
         $user = User::where('email', $request->email)->first();
 
@@ -68,14 +70,10 @@ class AuthController extends Controller
             );
         }
 
-        $token = $this->generateToken($user);
+        $auth_token = $this->generateToken($user);
 
-        if ($token) {
-            $data = [
-                'user' => $user,
-                'token_type' => 'Bearer',
-                'token' => $token
-            ];
+        if ($auth_token) {
+            $data = $this->buildAuthResponseData($user, $auth_token);
 
             return $this->successResponse($data, Response::HTTP_CREATED);
         }
@@ -86,7 +84,7 @@ class AuthController extends Controller
         );
     }
 
-    public function register(RegisterRequest $request)
+    public function register(RegisterRequest $request): JsonResponse
     {
         $newUser = [
             'name' => $request->name,
@@ -97,25 +95,42 @@ class AuthController extends Controller
 
         $createdUser = User::create($newUser);
 
-        $token = $this->generateToken($createdUser);
-        $data = $this->buildAuthResponseData($createdUser, $token);
+        $auth_token = $this->generateToken($createdUser);
+        $data = $this->buildAuthResponseData($createdUser, $auth_token);
 
         return $this->successResponse($data, Response::HTTP_CREATED);
     }
 
     /**
+     * Handle user logout and token revocation.
+     */
+    public function logout(Request $request): JsonResponse
+    {
+        $request->user()->currentAccessToken()->delete();
+
+        return response()->json(
+            ['message' => 'Logged out successfully'],
+            Response::HTTP_OK
+        );
+    }
+
+    /**
      * Handle successful responses.
      */
-    private function successResponse($data, $statusCode = Response::HTTP_OK)
-    {
+    private function successResponse(
+        $data,
+        $statusCode = Response::HTTP_OK
+    ): JsonResponse {
         return response()->json(['data' => $data], $statusCode);
     }
 
     /**
      * Handle error responses.
      */
-    private function errorResponse(array $data, int $statusCode = Response::HTTP_BAD_REQUEST)
-    {
+    private function errorResponse(
+        array $data,
+        int $statusCode = Response::HTTP_BAD_REQUEST
+    ): JsonResponse {
         return response()->json($data, $statusCode);
     }
 }
