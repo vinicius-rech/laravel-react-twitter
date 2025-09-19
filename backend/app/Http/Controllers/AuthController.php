@@ -32,18 +32,17 @@ class AuthController extends Controller
      */
     private function generateToken(User $user): string
     {
-        return $user->createToken('auth_token')->plainTextToken;
+        return $user->createToken('token')->plainTextToken;
     }
 
     /**
      * Build the authentication response data
      */
-    private function buildAuthResponseData(User $user, string $auth_token): array
+    private function buildAuthResponseData(User $user, string $token): array
     {
         return [
-            'user' => $user,
             'token_type' => 'Bearer',
-            'auth_token' => $auth_token
+            'token' => $token
         ];
     }
 
@@ -70,10 +69,10 @@ class AuthController extends Controller
             );
         }
 
-        $auth_token = $this->generateToken($user);
+        $token = $this->generateToken($user);
 
-        if ($auth_token) {
-            $data = $this->buildAuthResponseData($user, $auth_token);
+        if ($token) {
+            $data = $this->buildAuthResponseData($user, $token);
 
             return $this->successResponse($data, Response::HTTP_CREATED);
         }
@@ -95,8 +94,8 @@ class AuthController extends Controller
 
         $createdUser = User::create($newUser);
 
-        $auth_token = $this->generateToken($createdUser);
-        $data = $this->buildAuthResponseData($createdUser, $auth_token);
+        $token = $this->generateToken($createdUser);
+        $data = $this->buildAuthResponseData($createdUser, $token);
 
         return $this->successResponse($data, Response::HTTP_CREATED);
     }

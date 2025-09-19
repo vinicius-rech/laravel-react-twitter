@@ -11,6 +11,7 @@ class Tweet extends Model
     use HasFactory;
 
     protected $fillable = [
+        'user_id',
         'content',
         'visibility',
     ];
@@ -20,6 +21,9 @@ class Tweet extends Model
         return $this->belongsTo(User::class);
     }
 
+    /**
+     * Scope a query to only include tweets visible to the given user.
+     */
     public function scopeVisibleTo($query, $user = null)
     {
         if(!$user) {
