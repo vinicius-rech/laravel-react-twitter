@@ -3,12 +3,25 @@
 namespace App\Http\Controllers;
 
 use App\Models\Tweet;
+use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Http\Requests\StoreTweetRequest;
 use Symfony\Component\HttpFoundation\Response;
 
 class TweetController extends Controller
 {
+    public function index(Request $request): JsonResponse
+    {
+        $user = $request->user();
+
+        $tweets = Tweet::visibleTo($user)
+            ->with('user')
+            ->latest()
+            ->paginate(9);
+
+        return response()->json($tweets, Response::HTTP_OK);
+    }
+
     /**
      * Store a newly created tweet in storage.
      *
