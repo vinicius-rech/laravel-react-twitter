@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Validation\Rules\Password;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,8 +28,23 @@ class AuthRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => 'required|string|email',
-            'password' => 'required|string',
+            'email' => [
+                'bail',
+                'required',
+                'string',
+                'email',
+                'max:255'
+            ],
+            'password' => [
+                'required',
+                'string',
+                'max:255',
+                Password::min(8)
+                    ->letters()
+                    ->mixedCase()
+                    ->numbers()
+                    ->symbols()
+            ],
         ];
     }
 
@@ -40,11 +56,13 @@ class AuthRequest extends FormRequest
      */
     protected function failedValidation(Validator $validator): void
     {
+        $data = [
+            'message' => 'The provided data is invalid.',
+            'errors' => $validator->errors()
+        ];
+
         throw new HttpResponseException(
-            response()->json([
-                'message' => 'The provided data is invalid.',
-                'errors' => $validator->errors()
-            ], Response::HTTP_UNPROCESSABLE_ENTITY)
+            response()->json($data, Response::HTTP_UNPROCESSABLE_ENTITY)
         );
     }
 }

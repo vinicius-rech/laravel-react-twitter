@@ -9,14 +9,31 @@ use Symfony\Component\HttpFoundation\Response;
 
 class AuthController extends Controller
 {
+    /*
+     * Response for invalid credentials
+    */
     private const INVALID_CREDENTIALS_RESPONSE = [
         'message' => 'Invalid credentials'
     ];
 
+    /*
+     * Response for unauthorized access attempts
+    */
     private const UNAUTHORIZED_RESPONSE = [
         'message' => 'Unauthorized'
     ];
 
+    /*
+     * Generate a new authentication token for the user
+    */
+    private function generateToken(User $user): string
+    {
+        return $user->createToken('auth_token')->plainTextToken;
+    }
+
+    /**
+     * Handle user login and token generation.
+     */
     public function login(AuthRequest $request)
     {
         $user = User::where('email', $request->email)->first();
@@ -37,13 +54,16 @@ class AuthController extends Controller
             );
         }
 
-        $token = $user->createToken('auth_token')->plainTextToken;
+        $token = $this->generateToken($user);
 
         if ($token) {
-            return $this->successResponse(
-                ['token' => $token],
-                Response::HTTP_CREATED
-            );
+            $data = [
+                'user' => $user,
+                'token_type' => 'Bearer',
+                'token' => $token
+            ];
+
+            return $this->successResponse($data, Response::HTTP_CREATED);
         }
 
         return $this->errorResponse(
@@ -52,11 +72,17 @@ class AuthController extends Controller
         );
     }
 
+    /**
+     * Handle successful responses.
+     */
     private function successResponse($data, $statusCode = Response::HTTP_OK)
     {
         return response()->json(['data' => $data], $statusCode);
     }
 
+    /**
+     * Handle error responses.
+     */
     private function errorResponse(array $data, int $statusCode = Response::HTTP_BAD_REQUEST)
     {
         return response()->json($data, $statusCode);
