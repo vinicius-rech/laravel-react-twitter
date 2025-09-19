@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use Random\Engine\Secure;
 use Illuminate\Support\Facades\Route;
+use App\Http\Middleware\SecureApiHeaders;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 
 class RouteServiceProvider extends ServiceProvider
@@ -25,7 +27,7 @@ class RouteServiceProvider extends ServiceProvider
     protected function mapApiRoutes(): void
     {
         Route::prefix('api')
-            ->middleware('api')
+            ->middleware(['api', SecureApiHeaders::class])
             ->group(base_path('routes/api.php'));
     }
 }
