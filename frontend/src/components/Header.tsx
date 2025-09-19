@@ -9,18 +9,27 @@ export default function Header() {
         <Link href="/" className="header-logo">
           <Image
             className="header-image"
-            src="/logo.svg"
             alt="Microblog Logo"
-            width={16}
+            src="/logo.svg"
             height={16}
+            width={16}
             priority
           />
-          Microblog
+          {process.env.NEXT_PUBLIC_APP_NAME &&
+            `${process.env.NEXT_PUBLIC_APP_NAME}`}
         </Link>
         <nav className="header-nav">
           <Link href="/logout" className="logout-cta">
             Logout
           </Link>
+          <Image
+            src="https://randomuser.me/api/portraits/men/1.jpg"
+            className="user-avatar"
+            alt="avatar"
+            height={40}
+            width={40}
+            priority
+          />
         </nav>
       </div>
     </header>

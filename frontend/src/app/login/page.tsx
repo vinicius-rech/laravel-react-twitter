@@ -39,17 +39,17 @@ export default function LoginPage() {
       <form className="form-container" onSubmit={handleSubmit}>
         <Title>Log in</Title>
         <Input
-          type="email"
+          onChange={(e) => setEmail(e.target.value)}
           placeholder="Email"
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          type="email"
         />
 
         <Input
-          type="password"
+          onChange={(e) => setPassword(e.target.value)}
           placeholder="Password"
           value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          type="password"
         />
 
         <Button type="submit">Log in</Button>

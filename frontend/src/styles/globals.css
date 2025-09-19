@@ -1,30 +1,33 @@
 @import "tailwindcss";
 
+@import "tailwindcss";
+
 @theme {
   --color-primary: #366347;
-  --color-submit: #38E07A;
-  --color-secondary: #38E07A;
-  --color-accent: #96C4A8;
-  --color-dark: #1C3024;
+  --color-submit: #38e07a;
+  --color-secondary: #38e07a;
+  --color-accent: #96c4a8;
+  --color-dark: #1c3024;
   --color-darker: #264533;
   --color-darkest: #122117;
   --color-foreground: #ffffff;
-  --font-family-sans: 'Spline Sans', Arial, Helvetica, sans-serif;
+  --font-family-sans: "Spline Sans", Arial, Helvetica, sans-serif;
 }
 
-:root{
+:root {
   --color-darkest: #122117;
   --color-background: #122117;
-  --color-foreground: #FFFFFF;
+  --color-foreground: #ffffff;
   --color-primary: #366347;
-  --color-secondary: #38E07A;
-  --color-accent: #96C4A8;
-  --color-dark: #1C3024;
+  --color-secondary: #38e07a;
+  --color-accent: #96c4a8;
+  --color-dark: #1c3024;
   --color-darker: #264533;
-  --font-sans: 'Spline Sans', Arial, Helvetica, sans-serif;
+  --font-sans: "Spline Sans", Arial, Helvetica, sans-serif;
 }
 
-html, body {
+html,
+body {
   width: 100%;
   height: 100%;
   margin: 0;
@@ -36,12 +39,12 @@ html, body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-.site-header {
-  @apply bg-darkest border-b border-accent;
+.btn-submit {
+  @apply bg-submit rounded-full w-full text-darkest text-sm font-semibold py-2 mt-10 hover:bg-submit/80 transition-colors;
 }
 
-.header-container {
-  @apply mx-auto px-10 py-2 flex items-center justify-between;
+.site-header {
+  @apply bg-darkest border-b border-accent;
 }
 
 .header-logo {
@@ -60,20 +63,73 @@ html, body {
   @apply flex h-screen justify-center items-center min-w-full;
 }
 
-.title {
-  @apply text-3xl font-bold pt-2 pb-7 font-bold;
+.logout-cta {
+  @apply text-foreground bg-darker rounded-full font-bold px-5 py-2 hover:bg-primary transition-colors select-none;
+}
+
+.header-container {
+  @apply mx-auto px-10 py-2 flex items-center justify-between;
+}
+
+/* Container principal */
+.container {
+  @apply flex h-screen justify-center items-center min-w-full flex-col;
 }
 
 .input-default {
   @apply bg-dark border-1 border-primary rounded-xl w-full p-4 mb-5 max-w-md;
 }
 
-.btn-submit {
-  @apply bg-submit rounded-full w-full text-darkest text-sm font-semibold py-2 mt-10 hover:bg-submit/80 transition-colors;
+/* Feed principal */
+.feed-container {
+  @apply px-3;
+}
+
+
+/* Título */
+.title {
+  @apply text-3xl font-bold pt-2 pb-7;
+}
+
+/* Área de tweet */
+.textarea-container {
+  @apply bg-dark rounded-xl p-5 flex flex-col;
+}
+.textarea-wrapper {
+  @apply flex w-full gap-3 items-start mb-2;
+}
+.user-avatar {
+  @apply w-10 h-10 rounded-full;
+}
+.textarea-tweet {
+  @apply flex-1 bg-transparent border-none outline-none text-white resize-none text-base p-2;
+}
+.tweet-actions {
+  @apply flex items-center justify-between mt-2;
+}
+
+.tweet-feed-controls {
+  @apply flex items-center gap-1;
+}
+.tweet-privacy {
+  @apply flex items-center gap-2 text-sm text-gray-300 pl-15;
+}
+.post-button {
+  @apply bg-[#2ecc71] text-darkest px-7 py-3 rounded-full font-semibold hover:bg-primary transition;
+}
+
+/* Lista de tweets */
+.tweet-feed {
+  @apply rounded-xl py-5;
 }
 
 .form-container {
   @apply flex flex-col w-md items-center;
+}
+
+/* Tweet individual */
+.tweet-container {
+  @apply flex gap-3 py-3;
 }
 
 .register-cta {
@@ -84,7 +140,92 @@ html, body {
   @apply font-semibold;
 }
 
-.logout-cta {
-  @apply text-foreground bg-darker rounded-full font-bold px-5 py-2 hover:bg-primary transition-colors select-none;
+.tweet-avatar {
+  @apply w-8 h-8 rounded-full;
 }
 
+.tweet-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.tweet-name {
+  font-weight: 600;
+  color: var(--color-foreground);
+}
+.tweet-time {
+  font-size: 12px;
+  color: var(--color-accent);
+}
+.tweet-text {
+  font-size: 14px;
+  color: #e2e8f0;
+}
+
+/* Toggle Switch Custom Classes */
+.toggle-switch {
+  width: 38px;
+  height: 20px;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  background-color: var(--color-darker);
+  border: none;
+  transition: background 0.2s;
+}
+.toggle-switch-on {
+  background-color: var(--color-secondary);
+}
+.toggle-knob {
+  width: 16px;
+  height: 16px;
+  border-radius: 9999px;
+  background: var(--color-foreground);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
+  transition: transform 0.2s;
+}
+.toggle-knob-on {
+  transform: translateX(20px);
+}
+.toggle-switch-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.tweet-name {
+  font-weight: 600;
+  color: var(--color-foreground);
+}
+.tweet-time {
+  font-size: 12px;
+  color: var(--color-accent);
+}
+.tweet-text {
+  font-size: 14px;
+  color: #e2e8f0;
+}
+/* Toggle Switch Custom Classes */
+.toggle-switch {
+  width: 38px;
+  height: 20px;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  background-color: var(--color-darker);
+  border: none;
+  transition: background 0.2s;
+}
+.toggle-switch-on {
+  background-color: var(--color-secondary);
+}
+.toggle-knob {
+  width: 16px;
+  height: 16px;
+  border-radius: 9999px;
+  background: var(--color-foreground);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
+  transition: transform 0.2s;
+}
+.toggle-knob-on {
+  transform: translateX(20px);
+}

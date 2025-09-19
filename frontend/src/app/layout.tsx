@@ -5,8 +5,8 @@ import Header from "@components/Header";
 
 const splineSans = Spline_Sans({
   variable: "--font-spline-sans",
-  subsets: ['latin'],
-  weight: ['400', '500', '700'],
+  subsets: ["latin"],
+  weight: ["400", "500", "700"],
 });
 
 export const metadata: Metadata = {
@@ -21,9 +21,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR">
-      <body
-        className={`${splineSans.variable} antialiased`}
-      >
+      <body className={`${splineSans.variable} antialiased`}>
         <Header />
         {children}
       </body>
