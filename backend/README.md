@@ -105,8 +105,97 @@ Listar tweets (com token):
 
 ## Testes
 
-- Limpar cache e rodar testes:
-  - `composer test`
+Como rodar os testes passo a passo (Windows/Linux):
+
+1. Pré-requisitos
+
+- PHP 8.2+ com extensões sqlite3 e pdo_sqlite habilitadas
+- Composer 2+
+- Dependências instaladas no diretório `backend/`
+
+No Windows, verifique no seu `php.ini` se as linhas estão ativas (sem ponto e vírgula):
+
+```ini
+extension=sqlite3
+extension=pdo_sqlite
+```
+
+1. Instalar dependências do projeto (apenas na primeira vez)
+
+- Dentro de `backend/` execute:
+
+```bash
+composer install
+```
+
+1. Gerar a APP_KEY (se ainda não gerou)
+
+```bash
+php artisan key:generate
+```
+
+1. Rodar toda a suíte de testes
+
+- Com limpeza de cache + runner padrão do Laravel:
+
+```bash
+composer test
+```
+
+- Alternativa (sem o script do Composer):
+
+```bash
+php artisan config:clear
+php artisan test
+```
+
+Observação: os testes usam SQLite em memória por padrão (ver `phpunit.xml` com `DB_CONNECTION=sqlite` e `DB_DATABASE=:memory:`), então eles NÃO afetam seu banco de desenvolvimento.
+
+1. Executar um arquivo de teste específico
+
+```bash
+php artisan test tests/Feature/AlgumTeste.php
+```
+
+Ou usando o Pest diretamente:
+
+```bash
+vendor/bin/pest tests/Unit/TweetTest.php
+```
+
+1. Filtrar por nome do teste
+
+- Via Artisan (PHPUnit):
+
+```bash
+php artisan test --filter=NomeDoMetodoOuClasse
+```
+
+- Via Pest (por expressão do título):
+
+```bash
+vendor/bin/pest -t "parte do título do teste"
+```
+
+1. Ver cobertura de código (opcional)
+
+Para cobertura, habilite o Xdebug ou PCOV. Com Xdebug ativo:
+
+```bash
+php -d xdebug.mode=coverage vendor/bin/pest --coverage
+```
+
+Ou com o runner do Laravel:
+
+```bash
+php -d xdebug.mode=coverage artisan test --coverage
+```
+
+1. Dicas e problemas comuns
+
+- Erro de driver/SQLite: certifique-se de que `sqlite3` e `pdo_sqlite` estão habilitados no `php.ini`.
+- Cache de config: o script `composer test` já limpa o cache (`config:clear`). Se executar apenas `php artisan test` e notar comportamento estranho, rode `php artisan config:clear` antes.
+- Banco real sendo usado: se você quiser forçar o uso do banco de testes em memória, confira seu `phpunit.xml` (já configurado neste projeto). Evite sobrescrever `DB_CONNECTION` via `.env` quando `APP_ENV=testing`.
 
 ## Troubleshooting
 

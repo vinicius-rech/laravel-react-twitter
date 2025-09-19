@@ -94,6 +94,16 @@ Usuários seedados (senha: `Password@123`):
 - `backend/README.md`: variáveis de ambiente, migrações, seeds, endpoints, exemplos de cURL e troubleshooting.
 - `frontend/README.md`: variáveis `NEXT_PUBLIC_*`, scripts, build e troubleshooting.
 
+## Testes (atalho)
+
+- Back-end (Laravel): dentro de `backend/` execute:
+
+```bash
+composer test
+```
+
+Guia completo de testes: veja "Testes" em `backend/README.md`.
+
 ## Licença
 
 MIT
