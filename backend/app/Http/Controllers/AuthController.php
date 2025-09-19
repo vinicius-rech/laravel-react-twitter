@@ -42,7 +42,12 @@ class AuthController extends Controller
     {
         return [
             'token_type' => 'Bearer',
-            'token' => $token
+            'token' => $token,
+            'user' => [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email
+            ]
         ];
     }
 
@@ -131,5 +136,21 @@ class AuthController extends Controller
         int $statusCode = Response::HTTP_BAD_REQUEST
     ): JsonResponse {
         return response()->json($data, $statusCode);
+    }
+
+    /**
+     * Get current authenticated user data
+     */
+    public function getCurrentUser(Request $request): JsonResponse
+    {
+        $user = $request->user();
+
+        return $this->successResponse([
+            'user' => [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email
+            ]
+        ]);
     }
 }
