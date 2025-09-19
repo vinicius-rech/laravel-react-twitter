@@ -1,4 +1,19 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #366347;
+  --color-submit: #38E07A;
+  --color-secondary: #38E07A;
+  --color-accent: #96C4A8;
+  --color-dark: #1C3024;
+  --color-darker: #264533;
+  --color-darkest: #122117;
+  --color-foreground: #ffffff;
+  --font-family-sans: 'Spline Sans', Arial, Helvetica, sans-serif;
+}
+
 :root{
+  --color-darkest: #122117;
   --color-background: #122117;
   --color-foreground: #FFFFFF;
   --color-primary: #366347;
@@ -10,11 +25,41 @@
 }
 
 html, body {
+  width: 100%;
   height: 100%;
   margin: 0;
+  padding: 0;
   background-color: var(--color-background) !important;
   color: var(--color-foreground);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.container {
+  @apply flex h-screen justify-center items-center min-w-full;
+}
+
+.title {
+  @apply text-3xl font-bold pt-2 pb-7 font-bold;
+}
+
+.input-default {
+  @apply bg-dark border-1 border-primary rounded-lg w-full py-3 px-3 mb-6;
+}
+
+.btn-submit {
+  @apply bg-submit rounded-full w-full text-darkest text-sm font-semibold py-2 mt-8;
+}
+
+.form-container {
+  @apply flex flex-col w-md items-center;
+}
+
+.register-cta {
+  @apply text-sm mt-4 text-accent;
+}
+
+.register-cta a {
+  @apply font-semibold;
 }
