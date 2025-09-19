@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Support\Str;
 use App\Http\Requests\AuthRequest;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Requests\RegisterRequest;
 use Symfony\Component\HttpFoundation\Response;
 
 class AuthController extends Controller
@@ -29,6 +31,18 @@ class AuthController extends Controller
     private function generateToken(User $user): string
     {
         return $user->createToken('auth_token')->plainTextToken;
+    }
+
+    /**
+     * Build the authentication response data
+     */
+    private function buildAuthResponseData(User $user, string $token): array
+    {
+        return [
+            'user' => $user,
+            'token_type' => 'Bearer',
+            'token' => $token
+        ];
     }
 
     /**
@@ -70,6 +84,23 @@ class AuthController extends Controller
             self::UNAUTHORIZED_RESPONSE,
             Response::HTTP_UNAUTHORIZED
         );
+    }
+
+    public function register(RegisterRequest $request)
+    {
+        $newUser = [
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'uuid' => Str::uuid(),
+        ];
+
+        $createdUser = User::create($newUser);
+
+        $token = $this->generateToken($createdUser);
+        $data = $this->buildAuthResponseData($createdUser, $token);
+
+        return $this->successResponse($data, Response::HTTP_CREATED);
     }
 
     /**
