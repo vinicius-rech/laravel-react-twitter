@@ -5,12 +5,14 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
 class AuthRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
+     * @todo implements authorization logic
      */
     public function authorize(): bool
     {
@@ -30,7 +32,13 @@ class AuthRequest extends FormRequest
         ];
     }
 
-    protected function failedValidation(Validator $validator)
+    /**
+     * The user has failed to provide valid data.
+     *
+     * @param Validator $validator
+     * @return void
+     */
+    protected function failedValidation(Validator $validator): void
     {
         throw new HttpResponseException(
             response()->json([

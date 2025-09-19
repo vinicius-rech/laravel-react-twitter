@@ -19,7 +19,6 @@ class AuthController extends Controller
 
     public function login(AuthRequest $request)
     {
-        dd('asdasd');
         $user = User::where('email', $request->email)->first();
 
         if (!$user) {
