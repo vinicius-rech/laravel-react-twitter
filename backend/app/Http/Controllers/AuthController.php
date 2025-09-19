@@ -11,14 +11,14 @@ class AuthController extends Controller
 {
     /*
      * Response for invalid credentials
-    */
+     */
     private const INVALID_CREDENTIALS_RESPONSE = [
         'message' => 'Invalid credentials'
     ];
 
     /*
      * Response for unauthorized access attempts
-    */
+     */
     private const UNAUTHORIZED_RESPONSE = [
         'message' => 'Unauthorized'
     ];
