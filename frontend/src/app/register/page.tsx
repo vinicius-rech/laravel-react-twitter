@@ -37,6 +37,11 @@ export default function RegisterPage() {
     <div className="container">
       <form className="form-container" onSubmit={handleSubmit}>
         <Title>Crie sua conta</Title>
+        {error && (
+          <p className="text-red-500 text-sm" role="alert">
+            {error}
+          </p>
+        )}
 
         <Input
           type="text"

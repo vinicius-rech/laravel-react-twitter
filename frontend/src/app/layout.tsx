@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Spline_Sans } from "next/font/google";
 import "@styles/globals.css";
 import Header from "@components/Header";
+import { Authprovider } from "@context/AuthContext";
 
 const splineSans = Spline_Sans({
   variable: "--font-spline-sans",
@@ -22,8 +23,10 @@ export default function RootLayout({
   return (
     <html lang="pt-BR">
       <body className={`${splineSans.variable} antialiased`}>
-        <Header />
-        {children}
+        <Authprovider>
+          <Header />
+          {children}
+        </Authprovider>
       </body>
     </html>
   );

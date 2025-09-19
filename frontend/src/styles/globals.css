@@ -82,7 +82,7 @@ body {
 
 /* Feed principal */
 .feed-container {
-  @apply px-3;
+  @apply w-full px-3 max-w-7xl;
 }
 
 

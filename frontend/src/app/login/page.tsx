@@ -30,14 +30,17 @@ export default function LoginPage() {
       const axiosError = error as AxiosError<{ message: string }>;
       setError(axiosError.response?.data?.message || "Erro ao efetuar login.");
     }
-
-    router.push("/login");
   };
 
   return (
     <div className="container">
       <form className="form-container" onSubmit={handleSubmit}>
         <Title>Log in</Title>
+        {error && (
+          <p className="text-red-500 text-sm" role="alert">
+            {error}
+          </p>
+        )}
         <Input
           onChange={(e) => setEmail(e.target.value)}
           placeholder="Email"

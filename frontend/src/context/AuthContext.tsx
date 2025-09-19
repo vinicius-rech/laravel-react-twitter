@@ -7,7 +7,7 @@ import {
   ReactNode,
 } from "react";
 import Cookies from "js-cookie";
-import { login, getCurrentUser, registerUser } from "@lib/api";
+import { login, getCurrentUser, registerUser, logout as apiLogout } from "@lib/api";
 
 interface User {
   id: number;
@@ -25,6 +25,7 @@ interface AuthContextProps {
     password: string,
     password_confirmation: string
   ) => Promise<void>;
+  logout: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextProps>({} as AuthContextProps);
@@ -88,8 +89,19 @@ export const Authprovider = ({ children }: { children: ReactNode }) => {
     });
   };
 
+  const logout = async () => {
+    try {
+      await apiLogout();
+    } catch {
+      // Ignore network/API errors during logout
+    } finally {
+      Cookies.remove("token");
+      setUser(null);
+    }
+  };
+
   return (
-    <AuthContext.Provider value={{ user, loading, loginUser, registerNewUser }}>
+    <AuthContext.Provider value={{ user, loading, loginUser, registerNewUser, logout }}>
       {children}
     </AuthContext.Provider>
   );
