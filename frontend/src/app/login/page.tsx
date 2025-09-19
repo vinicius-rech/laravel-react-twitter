@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@context/AuthContext";
 import { AxiosError } from "axios";
+
 import Input from "../../components/Input";
 import Button from "../../components/Button";
 import Title from "../../components/Title";
@@ -39,7 +40,7 @@ export default function LoginPage() {
         <Title>Log in</Title>
         <Input
           type="email"
-          placeholder="Username or email"
+          placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />

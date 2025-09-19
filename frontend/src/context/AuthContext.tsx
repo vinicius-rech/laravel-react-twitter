@@ -1,7 +1,13 @@
 "use client";
-import { createContext, useContext, useEffect, useState, ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  ReactNode,
+} from "react";
 import Cookies from "js-cookie";
-import { login, getCurrentUser } from "@lib/api";
+import { login, getCurrentUser, registerUser } from "@lib/api";
 
 interface User {
   id: number;
@@ -13,6 +19,12 @@ interface AuthContextProps {
   user: User | null;
   loading: boolean;
   loginUser: (email: string, password: string) => Promise<void>;
+  registerNewUser: (
+    name: string,
+    email: string,
+    password: string,
+    password_confirmation: string
+  ) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextProps>({} as AuthContextProps);
@@ -55,8 +67,29 @@ export const Authprovider = ({ children }: { children: ReactNode }) => {
     });
   };
 
+  const registerNewUser = async (
+    name: string,
+    email: string,
+    password: string,
+    password_confirmation: string
+  ) => {
+    const { data } = await registerUser({
+      name,
+      email,
+      password,
+      password_confirmation,
+    });
+    // Expires in 7 days
+    Cookies.set("token", data.token, { expires: 7 });
+
+    setUser({
+      ...data.user,
+      id: Number(data.user.id),
+    });
+  };
+
   return (
-    <AuthContext.Provider value={{ user, loading, loginUser }}>
+    <AuthContext.Provider value={{ user, loading, loginUser, registerNewUser }}>
       {children}
     </AuthContext.Provider>
   );

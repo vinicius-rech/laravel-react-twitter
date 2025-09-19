@@ -34,7 +34,14 @@ type LoginResponse = {
 export const login = (credentials: LoginCredentials) =>
   api.post<LoginResponse>("/login", credentials);
 
+export const registerUser = (credentials: {
+  name: string;
+  email: string;
+  password: string;
+  password_confirmation: string;
+}) => api.post<LoginResponse>("/register", credentials);
+
 export const getCurrentUser = () =>
-  api.get<Omit<LoginResponse, 'token'>>('/user');
+  api.get<Omit<LoginResponse, "token">>("/user");
 
 export default api;
