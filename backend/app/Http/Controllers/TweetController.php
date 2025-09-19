@@ -43,9 +43,7 @@ class TweetController extends Controller
      */
     public function update(StoreTweetRequest $request, Tweet $tweet): JsonResponse
     {
-        $isOwner = $tweet->user_id === $request->user()->id;
-        
-        if (!$isOwner) {
+        if (!$this->isOwner($tweet)) {
             return response()->json(
                 ['message' => 'Unauthorized'],
                 Response::HTTP_FORBIDDEN
@@ -55,5 +53,39 @@ class TweetController extends Controller
         $tweet->update($request->only(['content', 'visibility']));
 
         return response()->json($tweet->load('user'), Response::HTTP_OK);
+    }
+
+    /**
+     * Check if the authenticated user is the owner of the tweet.
+     *
+     * @param  Tweet  $tweet
+     * @return bool
+     */
+    private function isOwner(Tweet $tweet): bool
+    {
+        return $tweet->user_id === auth()->id();
+    }
+
+    /**
+     * Remove the specified tweet from storage.
+     *
+     * @param  Tweet  $tweet
+     * @return JsonResponse
+     */
+    public function destroy(Tweet $tweet): JsonResponse
+    {
+        if (!$this->isOwner($tweet)) {
+            return response()->json(
+                ['message' => 'Unauthorized'],
+                Response::HTTP_FORBIDDEN
+            );
+        }
+
+        $tweet->delete();
+
+        return response()->json(
+            ['message' => 'Tweet deleted successfully.'],
+            Response::HTTP_OK
+        );
     }
 }
