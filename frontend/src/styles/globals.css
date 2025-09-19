@@ -1,0 +1,20 @@
+:root{
+  --color-background: #122117;
+  --color-foreground: #FFFFFF;
+  --color-primary: #366347;
+  --color-secondary: #38E07A;
+  --color-accent: #96C4A8;
+  --color-dark: #1C3024;
+  --color-darker: #264533;
+  --font-sans: 'Spline Sans', Arial, Helvetica, sans-serif;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  background-color: var(--color-background) !important;
+  color: var(--color-foreground);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
